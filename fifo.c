@@ -127,6 +127,17 @@ void libera(node *FILA)
     }
 }
 
+node* buscar(node *lista, int num){
+    node *aux, *no = NULL;
+
+    aux = lista;
+    while(aux && aux->num != num)
+        aux = aux->prox;
+    if(aux)
+        no = aux;
+    return no;
+}
+
 void inicializa_fila(node *FILA, Memoria *memoria_virtual) {
     for (int i = 0; i < FILA_SIZE; i++)
     {
@@ -172,10 +183,11 @@ int teste(int seed)
         int address = rand() % END_LOOPS + START_LOOPS;
         Memoria memory_item = memoria_virtual[address];
         int escrita = rand() & 1;
-        
-        if (FILA->num != address) {
-            /* page miss */
 
+        node *busca = buscar(FILA, address);
+        
+        if (busca == NULL) {
+            /* page miss */
             page_miss_counter++;
             insere_pagina(FILA, address);
         }
